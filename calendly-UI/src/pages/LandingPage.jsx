@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Container, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../context/AuthContext';
 
 const BackgroundWrapper = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -51,9 +52,15 @@ const CustomButton = styled(Button)(({ theme }) => ({
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const handleLoginClick = () => {
-    navigate("/login"); 
+    if(user != null){
+      navigate("/calendar");
+    }
+    else {
+      navigate("/login");
+    } 
   };
 
   return (

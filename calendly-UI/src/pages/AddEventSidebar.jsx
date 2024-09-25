@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Drawer, TextField, Button, Box } from '@mui/material';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthContext } from '../context/AuthContext';
 
 const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent, selectedEvent }) => {
   const [title, setTitle] = useState('');
@@ -10,6 +11,8 @@ const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent,
   const [startTime, setStartTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
+
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (selectedEvent) {
@@ -36,6 +39,7 @@ const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent,
   const handleSubmit = () => {
     const eventData = {
       id: selectedEvent ? selectedEvent.id : uuidv4(),
+      user: user.email,
       title,
       description,
       start: moment(`${startDate} ${startTime}`).toDate(),
