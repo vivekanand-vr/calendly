@@ -2,7 +2,6 @@
 
 Calendly is an event scheduling application built using React for the frontend and Spring Boot for the backend. It provides users with a calendar view to manage their events, allowing them to add, update, delete, and drag-and-drop events. The app utilizes Firebase for authentication and stores event data in a MySQL database.
 
-### ▶️ Demo Link - <a href="https://youtu.be/Bfr_E7nezSA"> Youtube </a> ✅
 
 ## Features
 
@@ -17,19 +16,6 @@ Calendly is an event scheduling application built using React for the frontend a
   - Events are persisted in a MySQL database through a Spring Boot backend.
   - Backend follows the MVC design pattern.
 - **Material UI**: The app uses Material UI for a modern and responsive UI.
-
-## Snapshots
-<p>
-  <img src="https://github.com/user-attachments/assets/70f8780b-e4ef-4619-ab0e-254404edded3" alt="Screenshot 1" width="30%" />
-  <img src="https://github.com/user-attachments/assets/7cbb0719-e72c-4021-915e-027d86a71bec" alt="Screenshot 2" width="30%" />
-  <img src="https://github.com/user-attachments/assets/eabe6544-40b6-4b2c-bf28-ee0d28e886eb" alt="Screenshot 3" width="30%" />
-</p>
-<p>
-  <img src="https://github.com/user-attachments/assets/55bd65cb-51a8-4fee-b663-484fb22a867a" alt="Screenshot 4" width="30%" />
-  <img src="https://github.com/user-attachments/assets/1ab0798f-3d80-4cb2-8ef9-ea107e991d7d" alt="Screenshot 5" width="30%" />
-  <img src="https://github.com/user-attachments/assets/8bd6d34c-7659-4d0d-8850-cac524010a5f" alt="Screenshot 6" width="30%" />
-</p>
-
 
 ## API Endpoints
 
