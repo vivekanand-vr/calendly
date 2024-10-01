@@ -2,7 +2,9 @@ package com.calendly.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Data
@@ -20,9 +22,9 @@ public class Event {
     @Column
     private String description;
 
-    @Column(nullable = false)
-    private LocalDateTime start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime start;
 
-    @Column(nullable = false)
-    private LocalDateTime end;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime end;
 }
