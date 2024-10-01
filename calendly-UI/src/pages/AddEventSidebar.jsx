@@ -4,46 +4,55 @@ import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from '../context/AuthContext';
 
-const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent, selectedEvent }) => {
+const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent, selectedEvent, selectedDate }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
+  const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
 
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (selectedEvent) {
+      const eventStart = moment(selectedEvent.start);
+      const eventEnd = moment(selectedEvent.end);
+      
       setTitle(selectedEvent.title || '');
       setDescription(selectedEvent.description || '');
-      setStartDate(selectedEvent.start ? moment(selectedEvent.start).format('YYYY-MM-DD') : '');
-      setStartTime(selectedEvent.start ? moment(selectedEvent.start).format('HH:mm') : '');
-      setEndDate(selectedEvent.end ? moment(selectedEvent.end).format('YYYY-MM-DD') : '');
-      setEndTime(selectedEvent.end ? moment(selectedEvent.end).format('HH:mm') : '');
+      setDate(eventStart.format('YYYY-MM-DD'));
+      setStartTime(eventStart.format('HH:mm'));
+      setEndTime(eventEnd.format('HH:mm'));
+    } else if (selectedDate) {
+      resetForm();
+      setDate(moment(selectedDate).format('YYYY-MM-DD'));
+      setStartTime('00:00');
+      setEndTime('23:59');
     } else {
       resetForm();
     }
-  }, [selectedEvent]);
+  }, [selectedEvent, selectedDate]);
 
   const resetForm = () => {
     setTitle('');
     setDescription('');
-    setStartDate('');
+    setDate('');
     setStartTime('');
-    setEndDate('');
     setEndTime('');
   };
 
   const handleSubmit = () => {
+    const userTimezone = moment.tz.guess();
+    const startDateTime = moment.tz(`${date} ${startTime}`, userTimezone);
+    const endDateTime = moment.tz(`${date} ${endTime}`, userTimezone);
+
     const eventData = {
       id: selectedEvent ? selectedEvent.id : uuidv4(),
       user: user.email,
       title,
       description,
-      start: moment(`${startDate} ${startTime}`).toDate(),
-      end: moment(`${endDate} ${endTime}`).toDate(),
+      start: startDateTime.toISOString(),
+      end: endDateTime.toISOString(),
     };
 
     if (selectedEvent) {
@@ -53,17 +62,19 @@ const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent,
     }
 
     onHide();
+    resetForm();
   };
 
   const handleDelete = () => {
     if (selectedEvent) {
       onDeleteEvent(selectedEvent.id);
       onHide();
+      resetForm();
     }
   };
 
   return (
-    <Drawer anchor="right" open={show} onClose={onHide}>
+    <Drawer anchor="right" open={show} onClose={() => { onHide(); resetForm(); }}>
       <Box sx={{ width: 300, padding: 3 }}>
         <h3>{selectedEvent ? 'Edit Event' : 'Add Event'}</h3>
         <TextField
@@ -82,12 +93,12 @@ const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent,
           onChange={(e) => setDescription(e.target.value)}
         />
         <TextField
-          label="Start Date"
+          label="Date"
           type="date"
           fullWidth
           margin="normal"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
@@ -99,17 +110,6 @@ const AddEventSidebar = ({ show, onHide, onAddEvent, onEditEvent, onDeleteEvent,
           margin="normal"
           value={startTime}
           onChange={(e) => setStartTime(e.target.value)}
-          InputLabelProperties={{
-            shrink: true,
-          }}
-        />
-        <TextField
-          label="End Date"
-          type="date"
-          fullWidth
-          margin="normal"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
